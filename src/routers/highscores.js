@@ -1,9 +1,10 @@
 import express from "express";
-import {getHighscores, postHighscore} from "../controllers/highscores.js";
+import {getHighscores, postHighscore, putHighscore} from "../controllers/highscores.js";
 
 const router = express.Router();
 router.route('/')
     .get(getHighscores)
-    .post(postHighscore);
+    .post(postHighscore)
+    .put(putHighscore);
 
 export { router }
