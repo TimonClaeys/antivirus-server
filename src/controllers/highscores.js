@@ -33,3 +33,31 @@ export const getHighscores = (req, res) => {
         })
     })
 }
+
+export const postHighscore = (req, res) => {
+    const query = 'INSERT INTO highscores (user_id, game_id, time) VALUES (?,?,?)';
+    const values = [req.body['user_id'], req.body['game_id'], req.body['time']];
+
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.error('Error connecting to the DB')
+            return res.status(500).json({status: 'error', message: 'Internal server error'})
+        }
+        connection.query(query, values, (err, result) => {
+          connection.release();
+            if (err) {
+                console.error('Error executing querry', err);
+                return res.status(500).json({status: 'error', message: 'Internal server error'});
+            }
+            console.log(result.changedRows)
+            return res.status(201).json({
+                status: 'succes',
+                data: {
+                    'user_id': req.body['user_id'],
+                    'game_id': req.body['game_id'],
+                    'time': req.body['time']
+                }
+            })
+        })
+    })
+}
